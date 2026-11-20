@@ -1,0 +1,19 @@
+# 凭证与本地状态（绝不入库）
+vault/
+*.dat
+auth-v2.dat
+auth.json
+qwenworkcn_auth.json
+*.token
+.env
+
+# 测试临时产物
+chat_full_sse.txt
+qwen_models_*.json
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,17 @@
+{
+  "name": "magpie-qwenwork",
+  "version": "0.1.0",
+  "description": "把 QwenWork 千问办公国内版订阅变成 magpie 网关上的模型（qwen4-max 等）",
+  "type": "module",
+  "main": "./index.mjs",
+  "license": "MIT",
+  "engines": {"node": ">=20"},
+  "os": ["win32"],
+  "magpie": {
+    "name": "QwenWork 千问办公",
+    "maxConcurrency": 1,
+    "summary": {
+      "zh": "把 QwenWork 国内版订阅里的模型（qwen4-max / deepseek-v4-pro / glm-5.3 等）接到 magpie，Hermes / WorkBuddy 等 Agent 可直接调用。从已登录桌面客户端读取登录态，COSY 签名 + SSE 对话，无需账号密码。"
+    }
+  }
+}

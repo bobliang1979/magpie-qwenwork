@@ -1,0 +1,8 @@
+{
+  "package": "magpie-qwenwork",
+  "name": "QwenWork 千问办公",
+  "providers": ["qwenwork"],
+  "summary": {
+    "zh": "把 QwenWork 国内版订阅里的模型接到 magpie：从已登录的桌面客户端读取登录态，qwen4-max 等模型即可被 Hermes / WorkBuddy 调用。"
+  }
+}
