@@ -20,8 +20,24 @@ export default async function QwenWorkPlugin(input = {}) {
     return loadCredentials() || readDesktopCredentials();
   }
 
+  // 桌面客户端 QwenWorkCN 运行时会自动续期 auth-v2.dat。插件若一直用登录时的
+  // 旧凭证快照，token 到期就会失败。每次请求前读桌面最新凭证，账号一致且更新
+  // 则替换——不碰一次性 refresh token，零风险。60s 节流（DPAPI 解密有开销）。
+  let _desktop = { at: 0, creds: null };
+  function desktopFresh(base){
+    const now = Date.now();
+    if (!_desktop.creds || now - _desktop.at > 60_000) {
+      try { _desktop = { at: now, creds: readDesktopCredentials() }; }
+      catch { _desktop = { at: now, creds: null }; }
+    }
+    const d = _desktop.creds;
+    // 账号一致（防串号）+ 更新（比较 ISO 过期时间）才替换
+    if (d && d.user === base.user && (!base.expiresAt || (d.expiresAt || '') >= base.expiresAt)) return d;
+    return base;
+  }
+
   function sessionFor(auth){
-    const creds = credsFromAuth(auth);
+    const creds = desktopFresh(credsFromAuth(auth));
     const cacheKey = creds.user || 'default';
     let s = sessions.get(cacheKey);
     if (!s) {
@@ -40,6 +56,8 @@ export default async function QwenWorkPlugin(input = {}) {
       };
       sessions.set(cacheKey, s);
     }
+    // 关键：每次请求都把（可能更新的）桌面凭证写回 session，chat() 从这里读 token 签名
+    s.credentials = creds;
     return s;
   }
 

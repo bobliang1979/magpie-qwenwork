@@ -68,7 +68,7 @@ node test_integration.mjs                 # 插件全链路自测
 
 ## 已知限制
 
-- **Token 无自动续期**：access token / refresh token 过期后需重新 `magpie plugin login qwenwork` 或重启客户端。
+- **Token 自动续期（已实现）**：桌面客户端 QwenWorkCN 运行时会自动续期 `auth-v2.dat`。插件每次请求前读取桌面最新凭证，账号一致且更新则替换——不碰一次性 refresh token，零风险。**前提：QwenWorkCN 桌面客户端必须在运行**（关掉客户端则失效，需重新登录）。
 - **部分模型响应慢**：如 `qwen4-max` 实测可达 50s+，可能触发 Agent 侧超时（499）。快模型用 `flash` / `glm-5.3-flash`；慢模型请把 Agent 超时设到 60s+。
 - 网关 usage 计数显示 0（不影响对话）。
 - 逆向未公开协议，QwenWork 升级可能导致失效；个人账号有风控风险。
